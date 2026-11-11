@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+<main class="home-page">
+    <section class="home-banner">
+        <div class="home-banner__content">
+            <p class="text-uppercase fw-semibold mb-2">Catálogo de Vehículos</p>
+            <h1>Encuentra el vehículo ideal para ti</h1>
+            <p class="lead">Explora nuestro catálogo de vehículos con información detallada e imágenes actualizadas.</p>
+            <div class="home-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'contacto' %}" class="btn btn-light btn-lg">Contacto</a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-light btn-lg">Cerrar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="home-carousel-section" aria-labelledby="vehiculos-destacados">
+        <h2 id="vehiculos-destacados" class="text-center mb-4">Vehículos destacados</h2>
+        <div id="carouselVehiculos" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            {% if vehiculos %}
+                <div class="carousel-indicators">
+                    {% for vehiculo in vehiculos %}
+                        <button type="button" data-bs-target="#carouselVehiculos" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" {% if forloop.first %}aria-current="true"{% endif %} aria-label="{{ vehiculo.modelo }}"></button>
+                    {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                    {% for vehiculo in vehiculos %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ vehiculo.foto.url }}" class="carousel-image" alt="{{ vehiculo.modelo }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if vehiculos|length > 1 %}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselVehiculos" data-bs-slide="prev" aria-label="Anterior">
+                        <img src="{% static 'images/flecha-izquierda.jpeg' %}" class="carousel-arrow" alt="Imagen anterior">
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselVehiculos" data-bs-slide="next" aria-label="Siguiente">
+                        <img src="{% static 'images/flecha-derecha.jpeg' %}" class="carousel-arrow" alt="Imagen siguiente">
+                    </button>
+                {% endif %}
+            {% else %}
+                <div class="carousel-empty">No hay vehículos con imágenes disponibles.</div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="catalogue-callout text-center">
+        <h2>¿Listo para elegir?</h2>
+        <p>Revisa todos nuestros vehículos disponibles.</p>
+        <a href="{% url 'catalogo_autos' %}" class="btn btn-primary btn-lg">Acceder al catálogo</a>
+    </section>
+</main>
+{% endblock %}

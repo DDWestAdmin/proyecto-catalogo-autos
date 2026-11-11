@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}?v=3">
+    <style>
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .admin-btn {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .admin-btn.active {
+            background-color: #ffffff;
+            color: #008080;
+        }
+        .admin-section {
+            display: none;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+        }
+        .admin-section.active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: #fff;
+            color: #000;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .btn-edit { background-color: #f0ad4e; color: white; }
+        .btn-delete { background-color: #d9534f; color: white; }
+        .form-group {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label { margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Panel de Administración</h1>
+    </header>
+
+    <!-- Menú de Navegación del Administrador -->
+    <div class="admin-nav">
+        <button type="button" class="admin-btn active" data-section="usuarios">Gestión de Usuarios</button>
+        <button type="button" class="admin-btn" data-section="catalogo">Gestión de Catálogo</button>
+    </div>
+
+    <div class="container">
+        
+        <!-- SECCIÓN 1: GESTIÓN DE USUARIOS -->
+        <section id="sec-usuarios" class="admin-section active">
+            <h2>Usuarios Registrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-usuarios">
+                    <!-- Datos cargados dinámicamente -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECCIÓN 2: GESTIÓN DE CATÁLOGO -->
+        <section id="sec-catalogo" class="admin-section">
+            <h2>Gestión del Catálogo de Vehículos</h2>
+            
+            <button type="button" class="admin-btn" style="margin-bottom: 15px;" onclick="abrirModalVehiculo()">+ Agregar Nuevo Vehículo</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Modelo</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-catalogo">
+                    <!-- Datos cargados dinámicamente -->
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Catálogo de Vehículos. Panel de Control.</p>
+    </footer>
+
+    <script src="{% static 'jsscripts.js' %}"></script>
+</body>
+</html>

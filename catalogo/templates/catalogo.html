@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+<!-- Mensajes de Sistema -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Catálogo de Vehículos</h2>
+    {% if user.is_authenticated %}
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+            + Añadir Vehículo
+        </button>
+    {% else %}
+        <div class="alert alert-warning py-2 mb-0" role="alert">
+            <small>Debe Registrarse para poder añadir vehículos.</small>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Grid de Vehículos (Lectura Pública) -->
+<div class="row">
+    {% for v in vehiculos %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            {% if v.foto %}
+                <img src="{{ v.foto.url }}" class="card-img-top vehicle-image" alt="{{ v.modelo }}">
+            {% else %}
+                <img src="{% static 'images/toyota-corrola-cs.jpeg' %}" class="card-img-top vehicle-image" alt="Sin foto">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ v.modelo }}</h5>
+                <p class="card-text">Año: {{ v.anio }}</p>
+                
+                <button class="btn btn-info btn-sm text-white" data-bs-toggle="modal" data-bs-target="#modalVer{{ v.id }}">
+                    Ver Detalle
+                </button>
+
+                {% if user.is_authenticated and v.propietario_id == user.id or user.is_staff %}
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar{{ v.id }}">Actualizar</button>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ v.id }}">Eliminar</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle (500x500px) -->
+    <div class="modal fade modal-vehiculo-500" id="modalVer{{ v.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header py-1">
+                    <h5 class="modal-title">{{ v.modelo }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-2">
+                    {% if v.foto %}
+                        <div class="contenedor-imagen mb-2">
+                            <img src="{{ v.foto.url }}" class="img-modal-vehiculo" alt="{{ v.modelo }}">
+                        </div>
+                    {% endif %}
+                    <p class="mb-1"><strong>Modelo:</strong> {{ v.modelo }}</p>
+                    <p class="mb-1"><strong>Año:</strong> {{ v.anio }}</p>
+                </div>
+                <div class="modal-footer py-1">
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if user.is_authenticated and v.propietario_id == user.id or user.is_staff %}
+    <!-- Modal Editar (500x500px) -->
+    <div class="modal fade modal-vehiculo-500" id="modalEditar{{ v.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header py-1">
+                    <h5 class="modal-title">Editar Vehículo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" action="{% url 'editar_vehiculo' v.id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body py-2">
+                        <div class="mb-2">
+                            <label>Nombre Modelo</label>
+                            <input type="text" name="modelo" value="{{ v.modelo }}" class="form-control" required>
+                        </div>
+                        <div class="mb-2">
+                            <label>Año</label>
+                            <select name="anio" class="form-control" required>
+                                {% for anio, etiqueta in anios %}
+                                    <option value="{{ anio }}" {% if anio == v.anio %}selected{% endif %}>{{ etiqueta }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="descripcion{{ v.id }}">Descripción corta</label>
+                            <textarea id="descripcion{{ v.id }}" name="descripcion" class="form-control" rows="2" maxlength="100" placeholder="Máximo 100 caracteres">{{ v.descripcion|default_if_none:"" }}</textarea>
+                            <small class="form-text text-muted">Máximo 100 caracteres.</small>
+                        </div>
+                        <div class="mb-2">
+                            <label>Foto del Vehículo</label>
+                            {% if v.foto %}
+                                <div class="contenedor-imagen mb-2">
+                                    <img src="{{ v.foto.url }}" class="edit-vehicle-preview" alt="Foto actual de {{ v.modelo }}">
+                                </div>
+                            {% endif %}
+                            <input type="file" name="foto" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer py-1">
+                        <button type="submit" class="btn btn-warning btn-sm">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar (500x500px) -->
+    <div class="modal fade modal-vehiculo-500" id="modalEliminar{{ v.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header py-1">
+                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <p>¿Seguro que deseas eliminar el registro <strong>{{ v.modelo }}</strong>?</p>
+                </div>
+                <div class="modal-footer py-1">
+                    <form method="POST" action="{% url 'eliminar_vehiculo' v.id %}">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% if user.is_authenticated %}
+<!-- Modal Crear (500x500px) -->
+<div class="modal fade modal-vehiculo-500" id="modalCrear" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+            <div class="modal-header py-1">
+                <h5 class="modal-title">Añadir Nuevo Vehículo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'crear_vehiculo' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body py-2">
+                    <div class="mb-2">
+                        <label>Nombre Modelo</label>
+                        {{ form.modelo }}
+                    </div>
+                    <div class="mb-2">
+                        <label>Año</label>
+                        {{ form.anio }}
+                    </div>
+                    <div class="mb-2">
+                        <label for="{{ form.descripcion.id_for_label }}">Descripción corta</label>
+                        {{ form.descripcion }}
+                        <small class="form-text text-muted">Máximo 100 caracteres.</small>
+                    </div>
+                    <div class="mb-2">
+                        <label>Foto del Vehículo</label>
+                        {{ form.foto }}
+                    </div>
+                </div>
+                <div class="modal-footer py-1">
+                    <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

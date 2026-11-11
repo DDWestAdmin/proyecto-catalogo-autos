@@ -1,0 +1,222 @@
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #0f766e !important;
+    color: #ffffff;
+}
+
+body > .container {
+    flex: 1 0 auto;
+    display: block;
+    width: 100%;
+    max-width: 1140px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 20px 12px;
+}
+
+.navbar .container {
+    display: flex;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.site-footer,
+footer {
+    flex-shrink: 0;
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 0;
+    width: 100%;
+}
+
+.card {
+    color: #212529;
+}
+
+.row {
+    --bs-gutter-y: 1.5rem;
+}
+
+.card-img-top.vehicle-image {
+    display: block;
+    width: 100%;
+    height: 210px !important;
+    object-fit: cover;
+    background-color: #e9ecef;
+}
+
+.card-body {
+    min-height: 135px;
+}
+
+.modal-vehiculo-500 .modal-content {
+    min-height: 320px;
+}
+
+.contenedor-imagen {
+    width: 100%;
+    max-width: 360px;
+    height: 180px !important;
+    margin-right: auto;
+    margin-left: auto;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.img-modal-vehiculo,
+.edit-vehicle-preview {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.home-page {
+    padding-bottom: 20px;
+}
+
+.home-banner {
+    padding: 70px 30px;
+    margin-bottom: 40px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(0, 0, 0, .55), rgba(15, 118, 110, .8));
+    border-radius: 12px;
+}
+
+.home-banner__content {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.home-banner h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+}
+
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.home-carousel-section #carouselVehiculos {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    min-height: 140px;
+    margin: 0 auto 40px;
+    padding: 20px 50px;
+    background-color: rgba(0, 0, 0, .2);
+    border-radius: 8px;
+}
+
+.home-carousel-section #carouselVehiculos .carousel-item {
+    text-align: center;
+}
+
+.home-carousel-section #carouselVehiculos .carousel-image {
+    display: block;
+    width: 100% !important;
+    max-width: 520px;
+    height: 260px !important;
+    margin: 0 auto;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.home-carousel-section #carouselVehiculos .carousel-control-prev,
+.home-carousel-section #carouselVehiculos .carousel-control-next {
+    width: 15%;
+    opacity: 1;
+}
+
+.home-carousel-section #carouselVehiculos .carousel-arrow {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.carousel-empty {
+    padding: 35px 10px;
+    text-align: center;
+}
+
+.catalogue-callout {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 28px;
+    color: #212529;
+    background-color: rgba(255, 255, 255, .92);
+    border-radius: 10px;
+}
+
+.password-requirements {
+    border: 0;
+    padding: 0;
+    display: block;
+}
+
+.password-requirements .password-requirement {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: #dc3545;
+    margin-bottom: 0.25rem;
+}
+
+.password-requirement input {
+    margin-right: 0.35rem;
+    accent-color: #dc3545;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.password-requirement.is-valid {
+    color: #198754;
+}
+
+.password-requirement.is-valid input {
+    accent-color: #198754;
+}
+
+.password-requirements .password-requirement.is-invalid {
+    color: #dc3545;
+}
+
+.password-requirements .password-requirement.is-invalid input {
+    accent-color: #dc3545;
+}
+
+@media (max-width: 576px) {
+    body > .container {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .home-banner {
+        padding: 45px 18px;
+    }
+
+    .home-carousel-section #carouselVehiculos {
+        padding-right: 35px;
+        padding-left: 35px;
+    }
+
+    .home-carousel-section #carouselVehiculos .carousel-image {
+        height: 190px !important;
+    }
+}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-body p-4">
+                <h3 class="card-title text-center text-primary mb-4">Crear Cuenta</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field }}
+                    {% endfor %}
+
+                    {% for field in form.visible_fields %}
+                        {% if field.name == 'password1' %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                {% endif %}
+                                <fieldset class="password-requirements mt-2">
+                                    <legend class="small mb-1">Requisitos de contraseña</legend>
+                                    <label class="password-requirement" data-requirement="length">
+                                        <input type="checkbox" disabled aria-label="Requisito de longitud">
+                                        <span>Al menos 8 caracteres</span>
+                                    </label>
+                                    <label class="password-requirement" data-requirement="special">
+                                        <input type="checkbox" disabled aria-label="Requisito de carácter especial">
+                                        <span>Un carácter especial (por ejemplo: # o ,)</span>
+                                    </label>
+                                    <label class="password-requirement" data-requirement="number">
+                                        <input type="checkbox" disabled aria-label="Requisito de número">
+                                        <span>Un carácter numérico</span>
+                                    </label>
+                                    <label class="password-requirement" data-requirement="uppercase">
+                                        <input type="checkbox" disabled aria-label="Requisito de mayúscula">
+                                        <span>Una letra mayúscula</span>
+                                    </label>
+                                    <label class="password-requirement" data-requirement="personal">
+                                        <input type="checkbox" disabled aria-label="Requisito de datos personales">
+                                        <span>No es igual al nombre ni al apellido</span>
+                                    </label>
+                                </fieldset>
+                            </div>
+                        {% else %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Registrarse</button>
+                    </div>
+                </form>
+                <hr>
+                <div class="text-center">
+                    <p class="mb-0">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
